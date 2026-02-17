@@ -1,0 +1,186 @@
+{
+  "name": "copilot-agent-participant-js",
+  "displayName": "DSX Change Assist Participant (JS)",
+  "description": "Modular JavaScript Chat Participant that mimics VS Code Copilot Agent Mode with configurable behavior.",
+  "version": "0.0.1",
+  "publisher": "local",
+  "private": true,
+  "engines": {
+    "vscode": "^1.104.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./extension.js",
+  "enabledApiProposals": [
+    "chatParticipantAdditions",
+    "defaultChatParticipant",
+    "findTextInFiles"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onLanguageModelChat:copilot",
+    "onChatParticipant:copilot-agent-participant-js.agent"
+  ],
+  "contributes": {
+    "chatParticipants": [
+      {
+        "id": "copilot-agent-participant-js.agent",
+        "name": "dsxchangeassist",
+        "fullName": "DSX Change Assist",
+        "description": "Agent-style participant with iterative tool use and configurable behavior.",
+        "isSticky": true,
+        "locations": [
+          "panel"
+        ],
+        "modes": [
+          "agent"
+        ],
+        "commands": [
+          {
+            "name": "compact",
+            "description": "Summarize this participant conversation and compress context."
+          },
+          {
+            "name": "explain",
+            "description": "Explain selected code or behavior in detail."
+          },
+          {
+            "name": "review",
+            "description": "Review code and identify issues."
+          },
+          {
+            "name": "tests",
+            "description": "Suggest or generate tests."
+          },
+          {
+            "name": "fix",
+            "description": "Diagnose and propose bug fixes."
+          },
+          {
+            "name": "new",
+            "description": "Scaffold something new from requirements."
+          },
+          {
+            "name": "edit",
+            "description": "Edit existing files or create files with generated code."
+          },
+          {
+            "name": "search",
+            "description": "Search text across workspace files."
+          },
+          {
+            "name": "websearch",
+            "description": "Run a web search using Tavily."
+          },
+          {
+            "name": "hello",
+            "description": "Print a Hello World style message in the integrated terminal."
+          }
+        ]
+      }
+    ],
+    "configuration": {
+      "title": "Copilot Agent Participant (JS)",
+      "properties": {
+        "agentModeParticipant.maxIterations": {
+          "type": "number",
+          "default": 6,
+          "minimum": 1,
+          "maximum": 20,
+          "description": "Maximum agent loop iterations before forcing a final response."
+        },
+        "agentModeParticipant.profile": {
+          "type": "string",
+          "default": "copilotLike",
+          "enum": [
+            "copilotLike"
+          ],
+          "description": "Behavior profile used by the participant. New profiles can be added later."
+        },
+        "agentModeParticipant.modelVendor": {
+          "type": "string",
+          "default": "copilot",
+          "description": "Fallback model vendor selector when no UI-selected model is provided."
+        },
+        "agentModeParticipant.modelFamily": {
+          "type": "string",
+          "default": "",
+          "description": "Optional fallback model family selector. Leave empty to let VS Code choose."
+        },
+        "agentModeParticipant.maxReadLines": {
+          "type": "number",
+          "default": 250,
+          "minimum": 20,
+          "maximum": 2000,
+          "description": "Maximum number of lines returned by read_file."
+        },
+        "agentModeParticipant.maxListDepth": {
+          "type": "number",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 8,
+          "description": "Maximum recursion depth for list_files."
+        },
+        "agentModeParticipant.maxSearchResults": {
+          "type": "number",
+          "default": 50,
+          "minimum": 5,
+          "maximum": 300,
+          "description": "Maximum number of search results returned by search_text."
+        },
+        "agentModeParticipant.enableFileEditTools": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable write_file and edit_file tools."
+        },
+        "agentModeParticipant.maxWriteChars": {
+          "type": "number",
+          "default": 200000,
+          "minimum": 1000,
+          "maximum": 2000000,
+          "description": "Maximum characters accepted by write_file/edit_file payloads."
+        },
+        "agentModeParticipant.enableCommandTool": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable run_command tool."
+        },
+        "agentModeParticipant.allowedCommands": {
+          "type": "array",
+          "default": [
+            "npm test",
+            "npm run test",
+            "npm run lint",
+            "npm run build",
+            "pnpm test",
+            "pnpm run test",
+            "pnpm run lint",
+            "pnpm run build",
+            "yarn test",
+            "yarn lint",
+            "yarn build"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "Allowlisted command prefixes for run_command."
+        },
+        "agentModeParticipant.commandTimeoutMs": {
+          "type": "number",
+          "default": 120000,
+          "minimum": 1000,
+          "maximum": 900000,
+          "description": "Timeout in milliseconds for run_command."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "check": "node --check extension.js && node --check src/agent/actionProtocol.js && node --check src/agent/agentModeRunner.js && node --check src/agent/historyAdapter.js && node --check src/agent/modelClient.js && node --check src/agent/profiles/copilotLikeProfile.js && node --check src/agent/profiles/index.js && node --check src/config/agentSettings.js && node --check src/tools/listFilesTool.js && node --check src/tools/readFileTool.js && node --check src/tools/searchTextTool.js && node --check src/tools/writeFileTool.js && node --check src/tools/editFileTool.js && node --check src/tools/runCommandTool.js && node --check src/tools/toolRegistry.js && node --check src/tools/webSearchTool.js && node --check src/tools/helloWorldTool.js && node --check src/utils/workspacePaths.js && node --check src/utils/envLoader.js",
+    "test": "npm run check"
+  },
+  "devDependencies": {
+    "vscode": "^1.1.37"
+  }
+}
