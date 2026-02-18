@@ -80,6 +80,29 @@
         ]
       }
     ],
+    "languageModelTools": [
+      {
+        "name": "fetch_jira_ticket",
+        "displayName": "Fetch Jira Ticket",
+        "toolReferenceName": "fetch_jira_ticket",
+        "modelDescription": "Fetch Jira issue details by key (for example SCRUM-1) or by ticket name/summary text. Returns title, description, status, assignee, priority, labels, components, timestamps, and a Jira URL in markdown.",
+        "userDescription": "Fetch Jira ticket title, description, and relevant details.",
+        "canBeReferencedInPrompt": true,
+        "icon": "$(issues)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ticket": {
+              "type": "string",
+              "description": "Jira issue key (for example SCRUM-1) or ticket name/search text."
+            }
+          },
+          "required": [
+            "ticket"
+          ]
+        }
+      }
+    ],
     "configuration": {
       "title": "Copilot Agent Participant (JS)",
       "properties": {
@@ -177,7 +200,7 @@
     }
   },
   "scripts": {
-    "check": "node --check extension.js && node --check src/agent/actionProtocol.js && node --check src/agent/agentModeRunner.js && node --check src/agent/historyAdapter.js && node --check src/agent/modelClient.js && node --check src/agent/profiles/copilotLikeProfile.js && node --check src/agent/profiles/index.js && node --check src/config/agentSettings.js && node --check src/tools/listFilesTool.js && node --check src/tools/readFileTool.js && node --check src/tools/searchTextTool.js && node --check src/tools/writeFileTool.js && node --check src/tools/editFileTool.js && node --check src/tools/runCommandTool.js && node --check src/tools/toolRegistry.js && node --check src/tools/webSearchTool.js && node --check src/tools/helloWorldTool.js && node --check src/utils/workspacePaths.js && node --check src/utils/envLoader.js",
+    "check": "node --check extension.js && node --check src/agent/actionProtocol.js && node --check src/agent/agentModeRunner.js && node --check src/agent/historyAdapter.js && node --check src/agent/modelClient.js && node --check src/agent/profiles/copilotLikeProfile.js && node --check src/agent/profiles/index.js && node --check src/config/agentSettings.js && node --check src/tools/listFilesTool.js && node --check src/tools/readFileTool.js && node --check src/tools/searchTextTool.js && node --check src/tools/writeFileTool.js && node --check src/tools/editFileTool.js && node --check src/tools/runCommandTool.js && node --check src/tools/toolRegistry.js && node --check src/tools/webSearchTool.js && node --check src/tools/helloWorldTool.js && node --check src/integrations/jira/jiraConfig.js && node --check src/integrations/jira/jiraClient.js && node --check src/integrations/jira/jiraDescriptionParser.js && node --check src/integrations/jira/jiraFormatter.js && node --check src/lmTools/fetchJiraTicketLanguageModelTool.js && node --check src/lmTools/registerLanguageModelTools.js && node --check src/utils/workspacePaths.js && node --check src/utils/envLoader.js",
     "test": "npm run check"
   },
   "devDependencies": {

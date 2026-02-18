@@ -8,6 +8,7 @@ This project is a custom VS Code chat participant (`@dsxchangeassist`) that mimi
 - Request-level model usage (uses model selected in chat UI when available)
 - Modular tool registry for easy extension
 - Web search tool (`web_search`) via Tavily
+- Local Jira tool (`fetch_jira_ticket`) for issue lookup by key/name
 - Workspace text search tool (`search_text`) via VS Code API
 - Diagnostic terminal tool (`hello_world`)
 - File edit tools (`write_file`, `edit_file`) for direct workspace edits
@@ -51,7 +52,8 @@ copilot-agent-participant-js/
 2. Run `npm install`.
 3. Copy `.env.example` to `.env`.
 4. Add `TAVILY_API_KEY=...` in `.env`.
-5. Press `F5` to start Extension Development Host.
+5. Add Jira values in `.env`: `JIRA_BASE_URL`, `JIRA_USER_EMAIL`, `JIRA_API_TOKEN`.
+6. Press `F5` to start Extension Development Host.
 
 ## Commands
 
@@ -60,6 +62,7 @@ copilot-agent-participant-js/
 - `/search <query>` - explicit workspace text search
 - `/websearch <query>` - explicit Tavily web search
 - `/hello [message]` - print to terminal
+- `#fetch_jira_ticket <SCRUM-1 or ticket name>` - fetch Jira ticket context via local LM tool
 
 ## Edit behavior
 
@@ -79,3 +82,4 @@ copilot-agent-participant-js/
 - `PORTABILITY_AND_SETUP.md`
 - `AGENT_MODE_AND_TOOL_CALLING_EXPLAINED.md`
 - `AGENT_PROFILE_AND_CHANGE_ASSISTANT_ROADMAP.md`
+- `JIRA_LOCAL_TOOL_SETUP.md`

@@ -3,6 +3,7 @@ const { loadAgentSettings } = require('./src/config/agentSettings');
 const { resolveProfile } = require('./src/agent/profiles');
 const { AgentModeRunner } = require('./src/agent/agentModeRunner');
 const { ToolRegistry } = require('./src/tools/toolRegistry');
+const { registerLanguageModelTools } = require('./src/lmTools/registerLanguageModelTools');
 
 const PARTICIPANT_ID = 'copilot-agent-participant-js.agent';
 
@@ -16,6 +17,7 @@ function activate(context) {
 	let profile = resolveProfile(settings.profile);
 
 	const toolRegistry = new ToolRegistry(settings);
+	const languageModelToolDisposables = registerLanguageModelTools();
 	const runner = new AgentModeRunner({
 		participantId: PARTICIPANT_ID,
 		settings,
@@ -39,6 +41,7 @@ function activate(context) {
 		participant,
 		toolRegistry,
 		runner,
+		...languageModelToolDisposables,
 		vscode.workspace.onDidChangeConfiguration((event) => {
 			if (!event.affectsConfiguration('agentModeParticipant')) {
 				return;
